@@ -1,0 +1,14 @@
+scalar M /1000/;
+sets j /1*6/, b /1*2/;
+binary variable x(b,j);
+positive variable t(b);
+variable z;
+parameter p(j) /1 20, 2 50, 3 80, 4 70, 5 15, 6 55/;
+equation obj, capacity, partitioning, time1;
+obj .. z =e=sum(b,t(b));
+capacity(b).. sum(j,x(b,j)) =e= 3;
+partitioning(j)..sum(b,x(b,j)) =e= 1;
+time1(b,j).. t(b)=g=p(j)*x(b,j);
+model Batching /all/;
+solve Batching using mip min z;
+display x.l, z.l;
